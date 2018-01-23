@@ -1,0 +1,11 @@
+{
+  "name": "builder",
+  "main": "build.js",
+  "scripts": {
+    "start": "node build.js"
+  },
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "nunjucks": "^3.0.1"
+  }
+}

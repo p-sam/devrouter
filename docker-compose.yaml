@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  devrouter_caddy:
+    container_name: devrouter_caddy
+    image: devrouter_caddy:latest
+    build:
+      context: .
+      dockerfile: ./docker/caddy/Dockerfile
+    environment:
+      DOMAIN: "${DOMAIN}"
+    ports:
+        - "${IP}:${HTTP2_PORT}:443"
+        - "${IP}:${HTTP_PORT}:80"
+    volumes:
+      - ./var/caddy:/srv/caddy/:cached
+      - ./.env:/srv/.env:ro
+  devrouter_dns:
+    container_name: devrouter_dns
+    image: devrouter_dns:latest
+    build:
+      context: .
+      dockerfile: ./docker/dns/Dockerfile
+    cap_add:
+      - NET_ADMIN
+    environment:
+      DOMAIN: "${DOMAIN}"
+      DNS_PORT: "${DNS_PORT}"
+    ports:
+      - "127.0.0.1:${DNS_PORT}:5353/udp"
+    volumes:
+      - ./var/dns:/srv/dns/:cached

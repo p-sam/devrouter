@@ -1,0 +1,27 @@
+{%- macro resolve_site(site, domain) -%}
+{{ site }}{% if domain %}.{% endif %}{{ domain }}
+{%- endmacro -%}
+
+{%- macro conf_common() -%}
+    log "{remote} - {host} [{when}] \"{method} {uri} {proto}\" {status} {size} \"{>Referer}\" \"{>User-Agent}\""
+    tls self_signed
+    gzip
+    request_id 
+    header /  Caddy-Request-Id {request_id}
+{%- endmacro -%}
+
+0.0.0.0:80, 0.0.0.0:443 {
+    {{ conf_common() }}
+    root /srv/caddy
+}
+
+{% for site, targets in sites %}
+## {{ site }}
+{{ resolve_site(site, domain) }}:80, {{ resolve_site(site, domain) }}:443 {
+    {{ conf_common() }}
+    proxy / {{ targets }} {
+        websocket
+        transparent
+    }
+}
+{% endfor %}
