@@ -1,6 +1,6 @@
 FROM abiosoft/caddy:builder as builder
 
-ARG version="0.10.10"
+ARG version="0.11.0"
 ARG plugins=""
 
 RUN VERSION=${version} PLUGINS=${plugins} /bin/sh /usr/bin/builder.sh
