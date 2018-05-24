@@ -7,7 +7,7 @@ RUN VERSION=${version} PLUGINS=${plugins} /bin/sh /usr/bin/builder.sh
 
 FROM alpine:3.7
 
-RUN apk add --no-cache nodejs nodejs-npm
+RUN apk add --no-cache nodejs nodejs-npm openssl
 
 # install caddy
 COPY --from=builder /install/caddy /usr/bin/caddy
@@ -20,6 +20,7 @@ COPY ./builder/caddy /srv/builder
 COPY ./docker/caddy/app.sh /usr/bin/docker-run-app
 
 RUN chmod a+rx /usr/bin/docker-run-app
+RUN chmod a+rx /srv/builder/makecert.sh
  
 RUN cd /srv/builder && npm install
 RUN npm install -g nodemon@1.14.11

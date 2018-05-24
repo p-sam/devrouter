@@ -5,6 +5,7 @@
     "start": "node build.js"
   },
   "dependencies": {
+    "cross-spawn": "^6.0.5",
     "dotenv": "^4.0.0",
     "nunjucks": "^3.0.1"
   }

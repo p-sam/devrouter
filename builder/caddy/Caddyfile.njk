@@ -4,7 +4,6 @@
 
 {%- macro conf_common() -%}
     log "{remote} - {host} [{when}] \"{method} {uri} {proto}\" {status} {size} \"{>Referer}\" \"{>User-Agent}\""
-    tls self_signed
     gzip
     request_id 
     header /  Caddy-Request-Id {request_id}
@@ -12,6 +11,7 @@
 
 0.0.0.0:80, 0.0.0.0:443 {
     {{ conf_common() }}
+    tls self-signed
     root /srv/caddy
 }
 
@@ -19,6 +19,11 @@
 ## {{ site }}
 {{ resolve_site(site, domain) }}:80, {{ resolve_site(site, domain) }}:443 {
     {{ conf_common() }}
+    {% if domain %}
+    tls /srv/caddy/cert/{{ resolve_site(site, domain) }}.pem /srv/caddy/cert/{{ resolve_site(site, domain) }}.key 
+    {% else %}
+    tls self-signed
+    {% endif %}
     proxy / {{ targets }} {
         websocket
         transparent
