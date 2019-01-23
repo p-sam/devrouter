@@ -1,11 +1,11 @@
 FROM abiosoft/caddy:builder as builder
 
-ARG version="0.11.0"
+ARG version="0.11.2"
 ARG plugins=""
 
 RUN VERSION=${version} PLUGINS=${plugins} /bin/sh /usr/bin/builder.sh
 
-FROM alpine:3.7
+FROM alpine:3.8
 
 RUN apk add --no-cache nodejs nodejs-npm openssl
 
@@ -23,7 +23,7 @@ RUN chmod a+rx /usr/bin/docker-run-app
 RUN chmod a+rx /srv/builder/makecert.sh
  
 RUN cd /srv/builder && npm install
-RUN npm install -g nodemon@1.14.11
+RUN npm install -g nodemon@1.18.9
 
 RUN rm -rf /usr/share/man /tmp/* /var/cache/apk/* \
     /root/.npm /root/.node-gyp /usr/lib/node_modules/npm/man \
